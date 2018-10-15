@@ -5,7 +5,9 @@ toucan
 [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/REPLACE_WITH_APPVEYOR_LINK/branch/master?svg=true)](https://ci.appveyor.com/project/REPLACE_WITH_OWNER_ACCOUNT/toucan/branch/master)
 [![codecov](https://codecov.io/gh/REPLACE_WITH_OWNER_ACCOUNT/toucan/branch/master/graph/badge.svg)](https://codecov.io/gh/REPLACE_WITH_OWNER_ACCOUNT/toucan/branch/master)
 
-Tools and utilities for the can-do user
+TOols and Utilities for the can-do toucan
+
+[Documentation available here.](https://omara.readthedocs.io/projects/toucan/en/latest/)
 
 ### Copyright
 
