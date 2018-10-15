@@ -1,0 +1,9 @@
+
+Toucan command-line utilities
+=============================
+
+Toucan mostly consists of command-line fun times to make your life easier.
+
+
+.. automodule:: toucan.utilities.binlink
+    :members:
