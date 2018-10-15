@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Toucan asdf
+Toucan
 =========================================================
 
 Tools and utilities that we find pretty helpful. This 
@@ -11,12 +11,10 @@ library assumes that you are using **Python 3** and has
 made no attempt to account for versions prior to 3.5.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
    setup
    utilities
-
-
 
 
 License
