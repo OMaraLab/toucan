@@ -1,0 +1,171 @@
+#!/usr/bin/env python 
+"""
+Marking, and your terrible Learning Management System that the 
+university pays way too much for can't anonymize student submissions?
+Hash submissions while you mark and unhash them when you're done 
+with one easy line. The hashes are freely available in the file, 
+but if a) your tutors are not too soul-crushed to actually care and 
+b) you can't trust them, you have bigger problems on your hands. You 
+can also just drag the file out for safekeeping I guess.
+
+This module uses default libraries but likely requires Python 3. It's 
+not the most robustly written as we didn't need it to be.
+"""
+import os
+import glob
+import sys
+import argparse
+
+
+parser = argparse.ArgumentParser(description="hash paths")
+parser.add_argument('path', default=os.getcwd(), nargs='?',
+                    help="path to folder of Wattle submissions")
+parser.add_argument('--back', action='store_true', dest='back',
+                    help="unhash things")
+
+
+class HashFile:
+    """
+    Holds the keys and actually changes the filenames.
+    """
+
+    FILENAME = ".hash_map.dat"
+    DELIMITER = "    ------>    "
+    PREFIX = "hashed"
+
+    def __init__(self, path, filename=FILENAME):
+        self.path = os.path.abspath(path)
+        self.file = self.in_path(filename)
+
+    def in_path(self, item):
+        if self.path not in item:
+            return os.path.join(self.path, item)
+
+    def create_file(self):
+        with open(self.file, 'w') as f:
+            f.write("Hash map\n")
+        return self
+
+    def hash_and_add(self, item):
+        if self.path in item:
+            item = item[len(self.path):]
+
+        name, ext = os.path.splitext(item)
+        hashed = self.PREFIX + str(hash(name)) + ext
+        self.add_transform(item, hashed)
+
+        os.rename(self.in_path(item), self.in_path(hashed))
+
+
+    def add_transform(self, old, new):
+        with open(self.file, 'a') as f:
+            f.write(old + self.DELIMITER + new + "\n")
+
+    def get_transform(self):
+        with open(self.file, 'r') as f:
+            lines = [x.strip() for x in f.readlines()][1:]
+        lines = [x.split(self.DELIMITER)[:2] for x in lines]
+        pathed = [(self.in_path(x), self.in_path(y)) for x, y in lines]
+        return pathed
+
+    def unhash(self):
+        hashes = self.get_transform()
+        for old, new in hashes:
+            os.rename(new, old)
+        self.remove()
+
+    def remove(self):
+        os.unlink(self.file)
+
+
+
+
+def get_path(path):
+    """
+    Hash files. 
+    """
+    for root, dirs, files in os.walk(path, topdown=False):
+        hash_file = HashFile(root).create_file()
+        for d in dirs:
+            hash_file.hash_and_add(d)
+        for f in files:
+            hash_file.hash_and_add(f)
+
+def unhash(path):
+    """
+    Unhash files.
+    """
+    for root, dirs, files in os.walk(path, topdown=False):
+        HashFile(root).unhash()
+
+
+def randomize(paths, back=False):
+    """
+    Wrapper function to recursively hash or unhash over a 
+    directory system.
+
+    Parameters
+    ----------
+    paths: list
+        List of paths to go over.
+    back: bool
+        Whether to hash back.
+
+    Examples
+    --------
+    $ ls *
+    camel:
+        camel.png         camel_data.csv    camel_report.docx
+
+    goat:
+        lab2.docx
+
+    okapi:
+        psych_report.pdf
+
+    toucan:
+        toucan_graphs.csv     toucan_submission.pdf
+
+    $ randomize
+    $ ls *
+    hashed-4534227490278080168:
+        hashed-5268810318780526497.pdf hashed7240516292622205258.csv
+
+    hashed-5807559932020193675:
+        hashed9023048498483281096.pdf
+
+    hashed-8635424089026415006:
+        hashed-8352870137889654378.docx
+
+    hashed1862819106113257637:
+        hashed-4325006337967117557.csv hashed-892738159033623075.docx hashed1862819106113257637.png
+
+    $ randomize --back
+    $ ls *
+    camel:
+        camel.png         camel_data.csv    camel_report.docx
+
+    goat:
+        lab2.docx
+
+    okapi:
+        psych_report.pdf
+
+    toucan:
+        toucan_graphs.csv     toucan_submission.pdf
+    """
+    if back:
+        for p in paths:
+            unhash(p)
+    else:
+        for p in paths:
+            get_path(p)
+
+if __name__ == '__main__':
+    args = parser.parse_args(sys.argv[1:])
+    if isinstance(args.path, str):
+        paths = [args.path]
+    else:
+        paths = args.path
+
+    randomize(paths, back=args.back)
