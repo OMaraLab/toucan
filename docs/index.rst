@@ -15,6 +15,7 @@ made no attempt to account for versions prior to 3.5.
    
    setup
    utilities
+   stringops
 
 
 License
