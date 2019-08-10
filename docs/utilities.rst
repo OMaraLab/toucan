@@ -26,6 +26,30 @@ Here's the ``binlink`` help text. ::
       -h, --help  show this help message and exit
       --force     overwrite an existing target in $HOME/bin
 
+``gclone``
+=============
+
+``gclone`` clones a repository from GitHub. It's a shortcut to save you 
+from actually finding the repo and copying the address. If you are 
+cloning your own repository and you have set up your `~/.usr_profile`, 
+you don't have to specify the username.
+  
+
+Here's the ``gclone`` help text. ::
+
+  $ gclone -h
+  usage: gclone [-h] [-f] [user] repo [dest]
+
+  Clone repos from GitHub.
+
+  positional arguments:
+    user         username (default: lilyminium)
+    repo         repository name
+    dest         destination directory
+
+  optional arguments:
+    -h, --help   show this help message and exit
+    -f, --force  Skip command check
 
 ``randomize``
 =============

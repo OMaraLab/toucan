@@ -10,14 +10,14 @@ import argparse
 Parsing arguments
 """
 parser = argparse.ArgumentParser(add_help=True, 
-                                description='symlink to $HOME/bin')
+                                description='symlink to ~/bin')
 
 parser.add_argument('source', 
                     help='source')
 parser.add_argument('target', nargs='?', 
                     help='target')
-parser.add_argument('--force', dest="overwrite", action='store_true', 
-                    help='overwrite an existing target in $HOME/bin')
+parser.add_argument('--force', dest='overwrite', action='store_true', 
+                    help='overwrite an existing target in ~/bin')
 
 
 """
@@ -32,8 +32,8 @@ def binlink(source, target, overwrite=False):
         if overwrite:
             os.unlink(target_path)
         else:
-            print("Error: " + target_path + 
-                " already exists. Try another name or overwrite with --force")
+            print(f'Error: {target_path} already exists. '
+                   'Try another name or overwrite with --force')
             return
 
     os.symlink(source_path, target_path)
@@ -43,7 +43,7 @@ if __name__ == '__main__':
     Finding and validating environment
     """
     HOME = os.environ['HOME']
-    bin_path = HOME + '/bin'
+    bin_path = os.path.join(HOME, 'bin')
     create_bin = None
 
     args = parser.parse_args(sys.argv[1:])
@@ -51,14 +51,14 @@ if __name__ == '__main__':
     if not os.path.isdir(bin_path):
         if not args.overwrite:
             while create_bin not in 'yYnN':
-                create_bin = input(bin_path + 
-                                ' is not an existing directory. Create? y/n\n')
+                create_bin = input(f'{bin_path} is not an existing directory.'
+                                    ' Create? y/n\n')
             if create_bin in 'nN':
-                raise ValueError('Cannot link to ' + bin_path)
+                raise ValueError(f'Cannot link to {bin_path}')
 
-        os.makedir(bin_path)
+        os.mkdir(bin_path)
 
-        print("Created " + bin_path + "")
+        print(f'Created {bin_path}')
         print("""Add this to your path by adding this line to your .bashrc: 
             export PATH=$PATH:~/bin
             """)

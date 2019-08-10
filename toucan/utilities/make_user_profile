@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+import os
+
+HOME = os.environ['HOME']
+FILENAME = f'{HOME}/.usr_profile'
+
+FILE = """ # Raijin
+export RJ_USER={rj_user}
+export RJ_PROJECT={rj_project}
+export RJ_HOME_DIR={rj_home_dir}
+
+# GitHub
+export GIT_USER={git_user}
+"""
+
+
+def get_file_string():
+    rj_user = input('What is your Raijin username?\n')
+    rj_project = input("What is the Raijin project you're in?\n"
+                       "  (i.e. the second field when you go to short and type pwd)\n")
+    rj_home_dir = input('What is the folder that your home folder is in?\n'
+                        '  (i.e. the second field when you SSH into Raijin and type pwd)\n')
+    git_user = input('If you have a GitHub account, what is your username? (Leave blank for no account)\n')
+    return FILE.format(rj_user=rj_user, rj_project=rj_project,
+                       rj_home_dir=rj_home_dir, git_user=git_user)
+
+
+if __name__ == '__main__':
+    user_profile = get_file_string()
+    with open(FILENAME, 'w') as f:
+        f.write(user_profile)
+    print(f'Wrote user profile at {FILENAME}')
+    print('Add it to your .bashrc with the code below:')
+    print(f'    echo "if [ -f {FILENAME} ]; then . {FILENAME} ; fi" >> ~/.bashrc\n')

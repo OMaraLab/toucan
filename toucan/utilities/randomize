@@ -1,7 +1,6 @@
 #!/usr/bin/env python 
 """
-Marking, and your terrible Learning Management System that the 
-university pays way too much for can't anonymize student submissions?
+Marking, and your Learning Management System can't anonymize student submissions?
 Hash submissions while you mark and unhash them when you're done 
 with one easy line. The hashes are freely available in the file, 
 but if a) your tutors are not too soul-crushed to actually care and 

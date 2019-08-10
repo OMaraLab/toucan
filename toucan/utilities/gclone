@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+import argparse
+
+git_user = os.environ.get('GIT_USER')
+
+parser = argparse.ArgumentParser(description='Clone repos from GitHub.')
+if git_user:
+    parser.add_argument('user', nargs='?', type=str,
+                        default=git_user,
+                        help=f'username (default: {git_user})')
+else:
+    parser.add_argument('user', type=str,
+                        help='username')
+parser.add_argument('repo', type=str,
+                    help='repository name')
+
+parser.add_argument('dest', type=str, nargs='?',
+                    default='', help='destination directory')
+parser.add_argument('-f', '--force', action='store_true',
+                    help='Skip command check')
+
+
+def clone_wait(user=None, repo=None, dest="", force=False):
+    address = f'git@github.com:{user}/{repo}.git'
+    if not dest:
+        dest = repo
+    cmd = f'  git clone {address} {dest}\n'
+    if not force:
+        print(cmd)
+        keypress = input('Continue? [y] ')
+        if keypress not in 'yY':
+            print('\n  Cancelled.')
+            return
+    clone(address, dest)
+
+
+def clone(address, dest):
+    import subprocess
+    subprocess.call(['git', 'clone', address, dest])
+
+
+if __name__ == '__main__':
+    args = parser.parse_args(sys.argv[1:])
+    clone_wait(**vars(args))

@@ -6,9 +6,8 @@
 Toucan
 =========================================================
 
-Tools and utilities that we find pretty helpful. This 
-library assumes that you are using **Python 3** and has 
-made no attempt to account for versions prior to 3.5.
+Tools and utilities that we find pretty helpful. **This 
+library only supports Python 3.6+.**
 
 .. toctree::
    :maxdepth: 1
