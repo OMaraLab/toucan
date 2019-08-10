@@ -24,7 +24,7 @@ parser.add_argument('-f', '--force', action='store_true',
 
 
 def clone_wait(user=None, repo=None, dest="", force=False):
-    address = f'git@github.com:{user}/{repo}.git'
+    address = f'https://github.com/{user}/{repo}.git'
     if not dest:
         dest = repo
     cmd = f'  git clone {address} {dest}\n'
